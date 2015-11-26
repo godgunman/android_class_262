@@ -33,12 +33,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         hideCheckBox = (CheckBox) findViewById(R.id.hideCheckBox);
-        hideCheckBox.setChecked(true);
     }
 
     public void submit(View view){
         String text = inputText.getText().toString();
+        if(hideCheckBox.isChecked()){
+            text = "**********";
+            inputText.setText("***********");
+        }
         Toast.makeText(this, text, Toast.LENGTH_LONG).show();
-        inputText.setText("");
     }
 }
