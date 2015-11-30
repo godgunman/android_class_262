@@ -27,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
         editor = sharedPreferences.edit();
 
         inputText = (EditText)findViewById(R.id.inputText);
-        inputText.setText("1234");
+//        inputText.setText("1234");
+        inputText.setText(sharedPreferences.getString("inputText", ""));
         inputText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
