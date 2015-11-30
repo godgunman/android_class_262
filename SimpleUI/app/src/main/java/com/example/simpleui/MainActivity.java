@@ -58,11 +58,12 @@ public class MainActivity extends AppCompatActivity {
         String text = inputText.getText().toString();
         editor.putString("inputText", text);
         editor.commit();
-        Utils.writeFile(this, "history.txt", text+"\n");
+        Utils.writeFile(this, "history.txt", text + "\n");
         if(hideCheckBox.isChecked()){
             text = "**********";
             inputText.setText("***********");
         }
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+        String fileContent = Utils.readFile(this, "history.txt");
+        Toast.makeText(this, fileContent, Toast.LENGTH_LONG).show();
     }
 }
