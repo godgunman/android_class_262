@@ -43,4 +43,13 @@
         android:id="@+id/historyListView"
         android:layout_below="@+id/hideCheckBox"
         android:layout_centerHorizontal="true" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/storeInfoSpinner"
+        android:layout_alignBottom="@+id/inputText"
+        android:layout_toRightOf="@+id/inputText"
+        android:layout_toLeftOf="@+id/button"
+        android:layout_toStartOf="@+id/button" />
 </RelativeLayout>
