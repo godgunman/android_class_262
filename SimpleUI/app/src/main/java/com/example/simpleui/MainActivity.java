@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -32,17 +33,25 @@ public class MainActivity extends AppCompatActivity {
         inputText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-               if(event.getAction() == KeyEvent.ACTION_DOWN){
-                   if(keyCode == KeyEvent.KEYCODE_ENTER){
-                       submit(v);
-                       return true;
-                   }
-               }
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                        submit(v);
+                        return true;
+                    }
+                }
                 return false;
             }
         });
 
         hideCheckBox = (CheckBox) findViewById(R.id.hideCheckBox);
+        hideCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                editor.putBoolean("hideCheckBox", isChecked);
+                editor.commit();
+            }
+        });
+        hideCheckBox.setChecked(sharedPreferences.getBoolean("hideCheckBox", false));
     }
 
     public void submit(View view){
