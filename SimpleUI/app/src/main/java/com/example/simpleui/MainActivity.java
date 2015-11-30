@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         String text = inputText.getText().toString();
         editor.putString("inputText", text);
         editor.commit();
+        Utils.writeFile(this, "history.txt", text+"\n");
         if(hideCheckBox.isChecked()){
             text = "**********";
             inputText.setText("***********");
