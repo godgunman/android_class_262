@@ -49,9 +49,6 @@ public class MainActivity extends AppCompatActivity {
 
         Parse.enableLocalDatastore(this);
         Parse.initialize(this);
-        ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("foo", "bar");
-        testObject.saveInBackground();
 
         setContentView(R.layout.activity_main);
         storeInfoSpinner = (Spinner) findViewById(R.id.storeInfoSpinner);
@@ -146,6 +143,11 @@ public class MainActivity extends AppCompatActivity {
             orderData.put("note", text);
             orderData.put("menu", array);
             Utils.writeFile(this, "history.txt", orderData.toString() + "\n");
+
+            ParseObject orderObject = new ParseObject("Order");
+            orderObject.put("note", text);
+            orderObject.put("menu", array);
+            orderObject.saveInBackground();
 
         } catch (JSONException e) {
             e.printStackTrace();
