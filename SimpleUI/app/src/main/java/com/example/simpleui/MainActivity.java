@@ -16,6 +16,10 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_MENU_ACTIVITY = 1;
@@ -28,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
+    private String menuResult;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
-        inputText = (EditText)findViewById(R.id.inputText);
+        inputText = (EditText) findViewById(R.id.inputText);
 //        inputText.setText("1234");
         inputText.setText(sharedPreferences.getString("inputText", ""));
         inputText.setOnKeyListener(new View.OnKeyListener() {
@@ -79,13 +85,29 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, data);
         historyListView.setAdapter(adapter);
     }
-
-    public void submit(View view){
+/*
+{
+    "note": "this is a note",
+    "menu": [...]
+}
+*/
+    public void submit(View view) {
         String text = inputText.getText().toString();
         editor.putString("inputText", text);
         editor.commit();
-        Utils.writeFile(this, "history.txt", text + "\n");
-        if(hideCheckBox.isChecked()){
+
+        try {
+            JSONObject orderData = new JSONObject();
+            JSONArray array = new JSONArray(menuResult);
+            orderData.put("note", text);
+            orderData.put("menu", array);
+            Utils.writeFile(this, "history.txt", orderData.toString());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (hideCheckBox.isChecked()) {
             text = "**********";
             inputText.setText("***********");
         }
@@ -103,8 +125,7 @@ public class MainActivity extends AppCompatActivity {
                                     Intent data) {
         if (requestCode == REQUEST_CODE_MENU_ACTIVITY) {
             if (resultCode == RESULT_OK) {
-                String result = data.getStringExtra("result");
-                Log.d("debug", result);
+                menuResult = data.getStringExtra("result");
             }
         }
     }
