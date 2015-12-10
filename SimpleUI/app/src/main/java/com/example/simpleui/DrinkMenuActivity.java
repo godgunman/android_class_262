@@ -1,5 +1,6 @@
 package com.example.simpleui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -28,11 +29,22 @@ public class DrinkMenuActivity extends AppCompatActivity {
         number++;
         button.setText(String.valueOf(number));
     }
+
+    public void done(View view) {
+        JSONArray jsonData = getData();
+        Intent data = new Intent();
+        data.putExtra("result", jsonData.toString());
+        setResult(RESULT_OK, data);
+        finish();
+    }
+
         /*
 
-[{"name": "black tea", "l": 2, "m": 0},
- {"name": "milk tea", "l": 10, "m":3},
- {"name": "green tea", "l": 5, "m": 3}]
+[
+    {"name": "black tea", "l": 2, "m": 0},
+    {"name": "milk tea", "l": 10, "m":3},
+    {"name": "green tea", "l": 5, "m": 3}
+]
     * */
 
     public JSONArray getData() {
