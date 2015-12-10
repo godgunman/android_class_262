@@ -17,6 +17,9 @@ import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.parse.Parse;
+import com.parse.ParseObject;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,6 +46,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Parse.enableLocalDatastore(this);
+        Parse.initialize(this);
+        ParseObject testObject = new ParseObject("TestObject");
+        testObject.put("foo", "bar");
+        testObject.saveInBackground();
+
         setContentView(R.layout.activity_main);
         storeInfoSpinner = (Spinner) findViewById(R.id.storeInfoSpinner);
         sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE);
@@ -91,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
         List<Map<String, String>> data = new ArrayList<>();
 
-        for (int i = 0 ; i < rawData.length;i++) {
+        for (int i = 0; i < rawData.length; i++) {
             try {
                 JSONObject object = new JSONObject(rawData[i]);
                 String note = object.getString("note");
