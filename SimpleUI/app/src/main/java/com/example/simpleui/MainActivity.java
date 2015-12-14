@@ -51,9 +51,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Parse.enableLocalDatastore(this);
-        Parse.initialize(this);
-
         setContentView(R.layout.activity_main);
         storeInfoSpinner = (Spinner) findViewById(R.id.storeInfoSpinner);
         sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE);
