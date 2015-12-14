@@ -17,9 +17,11 @@ import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import org.json.JSONArray;
@@ -96,34 +98,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setHistory() {
-        String[] rawData = Utils.readFile(this, "history.txt").split("\n");
 
-        List<Map<String, String>> data = new ArrayList<>();
+        ParseQuery<ParseObject> query = new ParseQuery<>("Order");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                List<Map<String, String>> data = new ArrayList<>();
 
-        for (int i = 0; i < rawData.length; i++) {
-            try {
-                JSONObject object = new JSONObject(rawData[i]);
-                String note = object.getString("note");
-                JSONArray array = object.getJSONArray("menu");
+                for (int i = 0; i < objects.size(); i++) {
+                    ParseObject object = objects.get(i);
+                    String note = object.getString("note");
+                    JSONArray array = object.getJSONArray("menu");
 
-                Map<String, String> item = new HashMap<>();
-                item.put("note", note);
-                item.put("drinkNum", "15");
-                item.put("storeInfo", "NTU Store");
+                    Map<String, String> item = new HashMap<>();
+                    item.put("note", note);
+                    item.put("drinkNum", "15");
+                    item.put("storeInfo", "NTU Store");
 
-                data.add(item);
-            } catch (JSONException e) {
-                e.printStackTrace();
+                    data.add(item);
+                }
+
+                String[] from = {"note", "drinkNum", "storeInfo"};
+                int[] to = {R.id.note, R.id.drinkNum, R.id.storeInfo};
+
+                SimpleAdapter adapter = new SimpleAdapter(MainActivity.this,
+                        data, R.layout.listview_item, from, to);
+
+                historyListView.setAdapter(adapter);
             }
-        }
-
-        String[] from = {"note", "drinkNum", "storeInfo"};
-        int[] to = {R.id.note, R.id.drinkNum, R.id.storeInfo};
-
-        SimpleAdapter adapter = new SimpleAdapter(this,
-                data, R.layout.listview_item, from, to);
-
-        historyListView.setAdapter(adapter);
+        });
     }
 
     /*
