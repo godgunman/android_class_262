@@ -18,7 +18,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.SaveCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -147,7 +149,19 @@ public class MainActivity extends AppCompatActivity {
             ParseObject orderObject = new ParseObject("Order");
             orderObject.put("note", text);
             orderObject.put("menu", array);
-            orderObject.saveInBackground();
+            orderObject.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        Toast.makeText(MainActivity.this,
+                                "[SaveCallback] ok", Toast.LENGTH_SHORT).show();
+                    } else {
+                        e.printStackTrace();
+                        Toast.makeText(MainActivity.this,
+                                "[SaveCallback] fail", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
         } catch (JSONException e) {
             e.printStackTrace();
