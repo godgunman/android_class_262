@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
 
     private String menuResult;
+    private boolean hasPhoto = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,6 +171,11 @@ public class MainActivity extends AppCompatActivity {
             ParseObject orderObject = new ParseObject("Order");
             orderObject.put("note", text);
             orderObject.put("menu", array);
+            if(hasPhoto == true){
+                Uri uri = Utils.getPhotoUri();
+                ParseFile parseFile = new ParseFile("photo.png", Utils.uriToBytes(this, uri));
+                orderObject.put("photo", parseFile);
+            }
             orderObject.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
@@ -211,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
             if(resultCode == RESULT_OK){
                 Uri uri = Utils.getPhotoUri();
                 photoImageView.setImageURI(uri);
+                hasPhoto = true;
             }
         }
     }

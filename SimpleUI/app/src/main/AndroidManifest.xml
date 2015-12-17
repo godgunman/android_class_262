@@ -15,10 +15,10 @@
 
         <meta-data
             android:name="com.parse.APPLICATION_ID"
-            android:value="r17eH9ID0abjiq6Cd4fp6v038YhW6s7PzQhBMHEg" />
+            android:value="72YEqE4zZdUBxRkZdoIhAvFIhJ2XaaLaAGMOezzr" />
         <meta-data
             android:name="com.parse.CLIENT_KEY"
-            android:value="7zuwuiadXp7iNPDrLTwG72FtZsFtRm8XmVAF6ula" />
+            android:value="VL1cYeifezaqKN7lBZSAgIaM2EwN5Lv1iNXe6lvY" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
