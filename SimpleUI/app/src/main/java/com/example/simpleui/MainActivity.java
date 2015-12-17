@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private String menuResult;
     private boolean hasPhoto = false;
+    private List<ParseObject> queryResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         historyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                goToOrderDetail();
+                goToOrderDetail(position);
             }
         });
         progressDialog = new ProgressDialog(this);
@@ -109,9 +110,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void goToOrderDetail() {
+    private void goToOrderDetail(int position) {
         Intent intent = new Intent();
         intent.setClass(this, OrderDetailActivity.class);
+        ParseObject object = queryResult.get(position);
+        intent.putExtra("note", object.getString("note"));
         startActivity(intent);
     }
 
@@ -140,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
-
+                queryResult = objects;
                 List<Map<String, String>> data = new ArrayList<>();
 
                 for (int i = 0; i < objects.size(); i++) {
