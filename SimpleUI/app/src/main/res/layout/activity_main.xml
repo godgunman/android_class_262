@@ -47,7 +47,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/storeInfoSpinner" />
+        android:layout_below="@+id/storeInfoSpinner"
+        android:visibility="gone" />
 
     <Spinner
         android:id="@+id/storeInfoSpinner"
@@ -71,5 +72,12 @@
         android:layout_height="wrap_content"
         android:id="@+id/photo"
         android:layout_below="@+id/hideCheckBox"
+        android:layout_centerHorizontal="true" />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_above="@+id/storeInfoSpinner"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

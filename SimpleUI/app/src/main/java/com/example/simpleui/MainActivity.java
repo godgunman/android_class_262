@@ -20,6 +20,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private ProgressDialog progressDialog;
+    private ProgressBar progressBar;
     private String menuResult;
     private boolean hasPhoto = false;
 
@@ -94,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
         historyListView = (ListView) findViewById(R.id.historyListView);
         progressDialog = new ProgressDialog(this);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         setHistory();
         setStoreInfo();
 
@@ -124,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
+
                 List<Map<String, String>> data = new ArrayList<>();
 
                 for (int i = 0; i < objects.size(); i++) {
@@ -146,6 +150,8 @@ public class MainActivity extends AppCompatActivity {
                         data, R.layout.listview_item, from, to);
 
                 historyListView.setAdapter(adapter);
+                historyListView.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
             }
         });
     }
