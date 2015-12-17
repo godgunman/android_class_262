@@ -3,6 +3,7 @@ package com.example.simpleui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,6 +39,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_MENU_ACTIVITY = 1;
+    private static final int REQUEST_TAKE_PHOTO = 2;
 
     private EditText inputText;
     private CheckBox hideCheckBox;
@@ -217,6 +219,9 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.action_take_photo) {
             Toast.makeText(this, "take photo", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent();
+            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, REQUEST_TAKE_PHOTO);
         }
 
         return super.onOptionsItemSelected(item);
