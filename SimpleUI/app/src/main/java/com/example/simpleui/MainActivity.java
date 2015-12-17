@@ -14,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -95,11 +96,23 @@ public class MainActivity extends AppCompatActivity {
         hideCheckBox.setChecked(sharedPreferences.getBoolean("hideCheckBox", false));
 
         historyListView = (ListView) findViewById(R.id.historyListView);
+        historyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                goToOrderDetail();
+            }
+        });
         progressDialog = new ProgressDialog(this);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         setHistory();
         setStoreInfo();
 
+    }
+
+    private void goToOrderDetail() {
+        Intent intent = new Intent();
+        intent.setClass(this, OrderDetailActivity.class);
+        startActivity(intent);
     }
 
     private void setStoreInfo() {
