@@ -10,6 +10,8 @@ import android.view.View;
 
 public class OrderDetailActivity extends AppCompatActivity {
 
+    private String address;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,17 +20,18 @@ public class OrderDetailActivity extends AppCompatActivity {
         String note = getIntent().getStringExtra("note");
         String storeInfo = getIntent().getStringExtra("storeInfo");
 
-        Log.d("debug", note);
-        Log.d("debug", storeInfo);
+        address = storeInfo.split(",")[1];
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                String url =
-                        "https://maps.googleapis.com/maps/api/geocode/json?address=taipei101";
+                String url = Utils.getGeoCodingUrl(address);
                 byte[] bytes = Utils.urlToBytes(url);
                 String result = new String(bytes);
+                double[] latLng = Utils.getLatLngFromJsonString(result);
                 Log.d("debug", result);
+                Log.d("debug", latLng[0] + "," + latLng[1]);
+
             }
         });
         thread.start();
