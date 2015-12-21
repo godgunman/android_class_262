@@ -9,34 +9,41 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class OrderDetailActivity extends AppCompatActivity {
 
-    private String address;
+    private TextView addressTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
 
+        addressTextView = (TextView) findViewById(R.id.address);
+
         String note = getIntent().getStringExtra("note");
         String storeInfo = getIntent().getStringExtra("storeInfo");
 
-        address = storeInfo.split(",")[1];
+        String address = storeInfo.split(",")[1];
 
-        AsyncTask task = new AsyncTask() {
-            @Override
-            protected Object doInBackground(Object[] params) {
-                Utils.addressToLatLng(address);
-                return null;
-            }
+        addressTextView.setText(address);
 
-            @Override
-            protected void onPostExecute(Object o) {
+        GeoCodingTask task = new GeoCodingTask();
+        task.execute(address);
 
-            }
-        };
-        task.execute();
+    }
+    class GeoCodingTask extends AsyncTask<String, Void, double[]> {
 
+        @Override
+        protected double[] doInBackground(String... params) {
+            String address = params[0];
+            return Utils.addressToLatLng(address);
+        }
+
+        @Override
+        protected void onPostExecute(double[] latLng) {
+            addressTextView.setText(latLng[0] + "," + latLng[1]);
+        }
     }
 }
