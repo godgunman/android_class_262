@@ -18,6 +18,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
 public class OrderDetailActivity extends AppCompatActivity {
@@ -57,7 +58,12 @@ public class OrderDetailActivity extends AppCompatActivity {
 
         mapFragment = (SupportMapFragment)
                 getSupportFragmentManager().findFragmentById(R.id.googleMap);
-        googleMap = mapFragment.getMap();
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap map) {
+                googleMap = map;
+            }
+        });
 
         String note = getIntent().getStringExtra("note");
         String storeInfo = getIntent().getStringExtra("storeInfo");
