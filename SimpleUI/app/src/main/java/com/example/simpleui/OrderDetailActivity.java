@@ -4,14 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -22,6 +17,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class OrderDetailActivity extends AppCompatActivity {
 
@@ -78,6 +74,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         task.execute(address);
 
     }
+
     class GeoCodingTask extends AsyncTask<String, Void, byte[]> {
 
         private String url;
@@ -102,6 +99,16 @@ public class OrderDetailActivity extends AppCompatActivity {
             LatLng storeAddress = new LatLng(latLng[0], latLng[1]);
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                     storeAddress, 17));
+
+            String[] storeInfo =
+                    getIntent().getStringExtra("storeInfo").split(",");
+
+            googleMap.addMarker(new MarkerOptions()
+                    .title(storeInfo[0])
+                    .snippet(storeInfo[1])
+                    .position(storeAddress));
+
+//            googleMap.setMyLocationEnabled(true);
 
         }
     }
