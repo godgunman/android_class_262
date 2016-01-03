@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         storeInfoSpinner = (Spinner) findViewById(R.id.storeInfoSpinner);
         sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        
+
         photoImageView = (ImageView) findViewById(R.id.photo);
         inputText = (EditText) findViewById(R.id.inputText);
         inputText.setText(sharedPreferences.getString("inputText", ""));
@@ -193,9 +193,14 @@ public class MainActivity extends AppCompatActivity {
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
+                if (e != null) {
+                    Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                    progressBar.setVisibility(View.GONE);
+                    return;
+                }
                 queryResult = objects;
                 List<Map<String, String>> data = new ArrayList<>();
-
                 for (int i = 0; i < objects.size(); i++) {
                     ParseObject object = objects.get(i);
                     String note = object.getString("note");
