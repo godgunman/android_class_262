@@ -26,9 +26,12 @@ import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.parse.FindCallback;
@@ -77,9 +80,9 @@ public class MainActivity extends AppCompatActivity {
         storeInfoSpinner = (Spinner) findViewById(R.id.storeInfoSpinner);
         sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
+        
         photoImageView = (ImageView) findViewById(R.id.photo);
         inputText = (EditText) findViewById(R.id.inputText);
-//        inputText.setText("1234");
         inputText.setText(sharedPreferences.getString("inputText", ""));
         inputText.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -124,7 +127,24 @@ public class MainActivity extends AppCompatActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                AccessToken token = loginResult.getAccessToken();
+                GraphRequest request = GraphRequest.newGraphPathRequest(token
+                        , "/v2.5/me",
+                        new GraphRequest.Callback() {
+                            @Override
+                            public void onCompleted(GraphResponse response) {
+                                JSONObject object = response.getJSONObject();
+                                try {
+                                    String name = object.getString("name");
+                                    Toast.makeText(MainActivity.this, "Hello " + name, Toast.LENGTH_SHORT).show();
+                                    Log.d("debug", object.toString());
 
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                request.executeAsync();
             }
 
             @Override
@@ -230,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
             orderObject.put("note", text);
             orderObject.put("storeInfo", storeInfoSpinner.getSelectedItem());
             orderObject.put("menu", array);
-            if(hasPhoto == true){
+            if (hasPhoto == true) {
                 Uri uri = Utils.getPhotoUri();
                 ParseFile parseFile = new ParseFile("photo.png", Utils.uriToBytes(this, uri));
                 orderObject.put("photo", parseFile);
@@ -270,12 +290,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == REQUEST_CODE_MENU_ACTIVITY) {
             if (resultCode == RESULT_OK) {
                 menuResult = data.getStringExtra("result");
             }
-        }else if(requestCode == REQUEST_TAKE_PHOTO){
-            if(resultCode == RESULT_OK){
+        } else if (requestCode == REQUEST_TAKE_PHOTO) {
+            if (resultCode == RESULT_OK) {
                 Uri uri = Utils.getPhotoUri();
                 photoImageView.setImageURI(uri);
                 hasPhoto = true;
@@ -301,7 +323,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void goToCamera(){
+    private void goToCamera() {
         Intent intent = new Intent();
         intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Utils.getPhotoUri());

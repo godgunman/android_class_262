@@ -25,7 +25,7 @@
             android:value="AIzaSyC5jPKaUwDlB7q87w7xf0lSLXegdz89Jkg" />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="1034832246538846" />
+            android:value="@string/fb_app_id" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
