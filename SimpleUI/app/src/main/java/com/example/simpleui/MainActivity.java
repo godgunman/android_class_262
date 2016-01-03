@@ -272,6 +272,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this,
                                 "[SaveCallback] fail", Toast.LENGTH_SHORT).show();
                     }
+                    setHistory();
                 }
             });
 
@@ -283,7 +284,6 @@ public class MainActivity extends AppCompatActivity {
             text = "**********";
             inputText.setText("***********");
         }
-        setHistory();
     }
 
     public void goToMenu(View view) {
